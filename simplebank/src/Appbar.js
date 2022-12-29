@@ -13,18 +13,20 @@ import Badge from '@mui/material/Badge';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function ButtonAppBar() {
 
-
+const ButtonAppBar = () => {
     const navigate = useNavigate();
 
     const handleClick = (page) => {
+        console.log(page);
         if (page === 'HOME') {
             navigate('/home');
+        } else if (page == 'PROFILE') {
+            navigate('/profile');
         }
     }
 
-    const pages = ['HOME', 'CONTRACT', 'PROFILE', 'TRANSFER']
+    const pages = ['HOME', 'CONTRACT', 'TRANSFER', 'DEBT', 'CHANGE PASSWORD']
 
     return (
         <AppBar position="absolute" open={true}>
@@ -47,7 +49,7 @@ export default function ButtonAppBar() {
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     {pages.map((page) => (
                         <Button
-                            onClick={handleClick(page)}
+                            onClick={() => handleClick(page)}
                             key={page}
                             sx={{ my: 2, color: 'white', display: 'block' }}
                         >
@@ -66,6 +68,9 @@ export default function ButtonAppBar() {
         </AppBar>
     );
 }
+
+
+export default ButtonAppBar
 
 
 

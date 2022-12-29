@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from './Title';
+import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
 
 // Generate Order Data
@@ -52,20 +52,15 @@ const rows = [
     ),
 ];
 
-export default function Orders(props) {
+export default function TransactionTable(props) {
 
     const navigate = useNavigate();
-
-    const handleCLlick = () => {
-        console.log('work')
-        navigate('/transactions')
-    }
 
 
     return (
         <React.Fragment>
-            <Title>Recent Transactions</Title>
-            <Table size="small">
+            <Title>All Transactions</Title>
+            <Table size="large">
                 <TableHead>
                     <TableRow>
                         <TableCell>Date</TableCell>
@@ -87,10 +82,6 @@ export default function Orders(props) {
                     ))}
                 </TableBody>
             </Table>
-
-            <Link color="primary" href="#" onClick={handleCLlick} sx={{ mt: 3 }}>
-                See more transactions
-            </Link>
         </React.Fragment>
     );
 }

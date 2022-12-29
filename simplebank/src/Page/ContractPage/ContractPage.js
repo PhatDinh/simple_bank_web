@@ -1,0 +1,7 @@
+
+ContractPage = () => {
+
+}
+
+
+export default ContractPage;
