@@ -11,12 +11,18 @@ import { createTheme, Paper } from "@mui/material";
 import { Box } from "@mui/system";
 import TransactionTable from "./TransactionTable";
 import { ThemeProvider } from "@emotion/react";
+import { useEffect } from "react";
 
 
 const mdTheme = createTheme();
 
 const TransactionPage = () => {
 
+
+
+    useEffect(() =>{
+        
+    },[])
 
 
     return (

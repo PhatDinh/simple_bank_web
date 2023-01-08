@@ -41,20 +41,36 @@ const theme = createTheme();
 export default function SignInSide() {
 
 
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
 
 
+    function handleLogin() {
+      const data = fetch('https://banking-web-app.onrender.com/api/customer/v1/login', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application-json',
+        },
+        body: JSON.stringify({
+          'username': data.get('email'),
+          'password': data.get('password')
+        })
+      }).then(res => {
+        if (!res.ok) throw new Error(res.status);
+        else return res.json();
+      }).then(data => {
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('refesh', data.refresh_token);
+        navigate('/home');
+      })
+    }
 
-    navigate('/home');
 
-    event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    handleSubmit();
+
   };
 
   function onChange(value) {
@@ -119,21 +135,21 @@ export default function SignInSide() {
                 autoComplete="current-password"
               />
               <FormControlLabel
-               
+
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-               <ReCAPTCHA
-                    style={
-                        {
-                            display:"flex",
-                            justifyContent: "center",
-                        }
-                    }
-                    sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                    onChange={onChange}
-                />
-              
+              <ReCAPTCHA
+                style={
+                  {
+                    display: "flex",
+                    justifyContent: "center",
+                  }
+                }
+                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                onChange={onChange}
+              />
+
               <Button
                 type="submit"
                 fullWidth
