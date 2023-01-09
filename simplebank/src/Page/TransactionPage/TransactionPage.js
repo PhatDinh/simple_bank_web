@@ -11,21 +11,36 @@ import { Button, createTheme, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TransactionTable from "./TransactionTable";
 import { ThemeProvider } from "@emotion/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 const mdTheme = createTheme();
 
 const TransactionPage = () => {
 
+    const bearer = 'bearer ' + localStorage.getItem('token')
+
+    const [transactions, setTransactions] = useState([]);
+
 
     const fetchData = async () => {
-        await fetch('');
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            setTransactions(data.results)
+        })
     }
 
 
     useEffect(() => {
-
+        fetchData();
     }, [])
 
 
@@ -53,7 +68,7 @@ const TransactionPage = () => {
                     minWidth: '80vw',
                     minHeight: '50vh'
                 }}>
-                        <TransactionTable />
+                        <TransactionTable transaction={transactions} />
                     </Box></Paper>
 
             </Box>
