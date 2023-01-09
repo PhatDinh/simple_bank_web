@@ -23,10 +23,12 @@ const ButtonAppBar = () => {
             navigate('/home');
         } else if (page == 'PROFILE') {
             navigate('/profile');
+        } else if (page == 'TRANSACTION') {
+            navigate('/transactions')
         }
     }
 
-    const pages = ['HOME', 'CONTRACT', 'TRANSFER', 'DEBT', 'CHANGE PASSWORD']
+    const pages = ['HOME', 'CONTRACT', 'TRANSACTION', 'DEBT', 'CHANGE PASSWORD']
 
     return (
         <AppBar position="absolute" open={true}>

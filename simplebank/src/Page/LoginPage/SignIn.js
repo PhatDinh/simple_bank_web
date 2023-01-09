@@ -11,76 +11,64 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from 'react-router-dom';
 
-
-function Copyright(props) {
-
+import { useEffect, useState } from "react";
 
 
-
-
-
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Simple Bank
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
 
 export default function SignInSide() {
 
 
+
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState('123456789');
+
+
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
 
 
-    function handleLogin() {
-      const data = fetch('https://banking-web-app.onrender.com/api/customer/v1/login', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application-json',
-        },
-        body: JSON.stringify({
-          'username': data.get('email'),
-          'password': data.get('password')
-        })
-      }).then(res => {
-        if (!res.ok) throw new Error(res.status);
-        else return res.json();
-      }).then(data => {
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('refesh', data.refresh_token);
-        navigate('/home');
-      })
-    }
-
-
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const data = new FormData(event.currentTarget);
-    handleSubmit();
-
+    console.log(data.get('email'))
+    const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/login', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application-json',
+      },
+      body: JSON.stringify({
+        'username': data.get("email"),
+        'password': data.get("password")
+      })
+    }).then(res => {
+      console.log(res);
+      if (!res.ok) throw new Error(res.status);
+      else return res.json();
+    }).then(data => {
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('refesh', data.refresh_token);
+      navigate('/home');
+    })
   };
 
   function onChange(value) {
     console.log("Captcha value:", value);
   }
 
+  function handleUsername(event) {
+    setUsername(event.target.value)
+  }
 
+  function handlePassword(event) {
+    console.log(event.target);
+    setPassword(event.target.vaulue)
+  }
 
   return (
-    <ThemeProvider theme={theme}>
+    <Box>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -113,7 +101,12 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <TextField
                 margin="normal"
                 required
@@ -135,21 +128,9 @@ export default function SignInSide() {
                 autoComplete="current-password"
               />
               <FormControlLabel
-
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <ReCAPTCHA
-                style={
-                  {
-                    display: "flex",
-                    justifyContent: "center",
-                  }
-                }
-                sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                onChange={onChange}
-              />
-
               <Button
                 type="submit"
                 fullWidth
@@ -170,11 +151,10 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </Box>
   );
 }

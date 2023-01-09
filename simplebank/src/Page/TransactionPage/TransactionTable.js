@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { Box } from '@mui/system';
 
 // Generate Order Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
@@ -57,9 +59,21 @@ export default function TransactionTable(props) {
     const navigate = useNavigate();
 
 
+    const movToCreate = () => {
+        navigate('/create-transaction')
+    }
+
+
     return (
         <React.Fragment>
-            <Title>All Transactions</Title>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
+                <Title>All Transactions</Title>
+                <Button sx={{
+                }} variant='contained' onClick={movToCreate}>Create Transaction</Button>
+            </Box>
             <Table size="large">
                 <TableHead>
                     <TableRow>

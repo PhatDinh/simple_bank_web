@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Orders from "../HomePage/Orders";
-import { createTheme, Paper } from "@mui/material";
+import { Button, createTheme, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TransactionTable from "./TransactionTable";
 import { ThemeProvider } from "@emotion/react";
@@ -19,10 +19,14 @@ const mdTheme = createTheme();
 const TransactionPage = () => {
 
 
+    const fetchData = async () => {
+        await fetch('');
+    }
 
-    useEffect(() =>{
-        
-    },[])
+
+    useEffect(() => {
+
+    }, [])
 
 
     return (
@@ -37,7 +41,7 @@ const TransactionPage = () => {
             <ButtonAppBar />
             <Box sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'center'
             }}>
                 <Paper sx={{
                     paddingLeft: 5,

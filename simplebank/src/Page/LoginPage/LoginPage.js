@@ -1,20 +1,15 @@
 
 import SignIn from "./SignIn";
 import './LoginPage.css';
+import { useSelector, useDispatch } from 'react-redux'
 
 
-const LoginPage = () =>{
+const LoginPage = () => {
 
-    const LoginForm = SignIn();
-
-
-
-
-    
 
     return (
         <div className="login-page">
-            {LoginForm}
+            <SignIn />
         </div>
     )
 }
