@@ -8,23 +8,20 @@ import Dashboard from "./Dashboard";
 
 const HomePage = () => {
 
-    const [accounts, setAccounts] = useState([]);
+    const [account, setAccount] = useState();
 
-    const bearer = localStorage.getItem('token')
-
-
+    const bearer = 'Bearer ' + localStorage.getItem('token')
     const fetchData = async () => {
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts', {
             method: 'GET',
-            mode: 'no-cors',
-            Authorization: {
-                'Bearer Token': bearer
-            },
             headers: {
-
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': bearer
             }
-        }).then(res => console.log(res))
+        }).then(res => {
+            if (!res.ok) throw new console.error(res);
+            return res.json();
+        }).then(data => console.log(data.results))
     }
 
     useEffect(() => {

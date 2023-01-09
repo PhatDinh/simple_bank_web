@@ -12,6 +12,7 @@ import HomePage from './Page/HomePage/HomePage';
 import TransactionPage from './Page/TransactionPage/TransactionPage';
 import ProfilePage from './Page/ProfilePage/ProfilePage';
 import CreateTransaction from './Page/TransactionPage/CreateTransaction';
+import ContractPage from './Page/ContractPage/ContractPage';
 //import ContractPage from './Page/ContractPage/ContractPage';
 //import TransactionPage from './Page/TransactionPage/TransactionPage';
 
@@ -25,6 +26,7 @@ root.render(
         <Route path="/transactions" element={<TransactionPage />} />
         <Route path="create-transaction" element={<CreateTransaction />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/contracts" element={<ContractPage />} />
 
       </Routes>
     </BrowserRouter>

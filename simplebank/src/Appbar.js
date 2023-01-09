@@ -25,6 +25,9 @@ const ButtonAppBar = () => {
             navigate('/profile');
         } else if (page == 'TRANSACTION') {
             navigate('/transactions')
+        } else if (page== 'CONTRACT')
+        {
+            navigate('/contracts')
         }
     }
 
