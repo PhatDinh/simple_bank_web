@@ -1,9 +1,9 @@
 import ButtonAppBar from "../../Appbar"
-import { Button, IconButton, MenuItem, Select, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@mui/material";
+import { Button, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
+import ConfirmTransaction from "./ConfirmTransaction";
 
 
 const CreateTransaction = () => {
@@ -28,6 +28,14 @@ const CreateTransaction = () => {
 
     //reciever_bank_account
     const [receiverAccount, setRecieverAccount] = useState();
+
+
+    //open confirm otp dialog
+    const [open, setOpen] = useState(false)
+    //new transaction id just create
+    const [transactionId, setTransctionId] = useState('');
+    //new token id just create
+    const [transactionToken , setTransactionToken] = useState('');
 
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
@@ -74,8 +82,12 @@ const CreateTransaction = () => {
             })
         }).then(res => {
             console.log(res)
+            return res.json();
+        }).then(data=>{
+            setTransctionId(data.id)
+            setTransactionToken(data.token)
         })
-
+        setOpen(true)
     }
 
     const goBack = () => {
@@ -181,6 +193,8 @@ const CreateTransaction = () => {
                     }}>Cancel</Button>
                     <Button variant="contained" size="medium" onClick={sendSubmit}>Submit</Button>
                 </Box>
+                <ConfirmTransaction open={open} bearer={bearer} id={transactionId}></ConfirmTransaction>
+
             </Box>
 
 

@@ -89,6 +89,12 @@ const ContactPage = () => {
                             }}>
                                 ACCOUNT NUMBER
                             </TableCell>
+                            <TableCell sx={{
+                                borderBottom: 'none',
+                                background: '#F4F5FF'
+                            }}>
+                                BANK NAME
+                            </TableCell>
 
                         </TableRow>
                     </TableHead>
@@ -107,6 +113,10 @@ const ContactPage = () => {
                                     <TableCell sx={{
                                         borderBottom: 'none',
                                     }}>{e.account_number}
+                                    </TableCell>
+                                    <TableCell sx={{
+                                        borderBottom: 'none',
+                                    }}>{e.bank_name}
                                     </TableCell>
                                 </TableRow>
                             })
