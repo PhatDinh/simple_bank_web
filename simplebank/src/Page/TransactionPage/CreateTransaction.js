@@ -16,9 +16,9 @@ const CreateTransaction = () => {
     const [receiverId, setReceiverId] = useState();
 
 
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState('');
     const [contacts, setContacts] = useState([]);
-    const [description, setDescription] = useState();
+    const [description, setDescription] = useState('');
 
 
 
@@ -59,7 +59,7 @@ const CreateTransaction = () => {
 
     const sendSubmit = async () => {
 
-        console.log(receiverAccount)
+        getAccountId(reciever)
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
             method: 'POST',
             headers: {
@@ -68,9 +68,9 @@ const CreateTransaction = () => {
             },
             body: JSON.stringify({
                 'amount': amount,
-                'description': description,
+                'description': 'test',
                 "is_fee_paid_by_me": true,
-                "receiver_id": receiverAccount.id
+                "receiver_id": receiverId
             })
         }).then(res => {
             console.log(res)
@@ -85,8 +85,7 @@ const CreateTransaction = () => {
 
     const selectContact = async (event) => {
         setReciever(event.target.value)
-        getAccountId(event.target.value)
-        getBankAccount(receiverId);
+        //getBankAccount(receiverId);
 
     }
 
@@ -116,7 +115,8 @@ const CreateTransaction = () => {
             }).then(res => {
                 return res.json();
             }).then(data => {
-                getBankAccount(data.results[0].id)
+                console.log(data)
+                setReceiverId(data.results[0].id)
             })
     }
 

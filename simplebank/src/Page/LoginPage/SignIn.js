@@ -34,6 +34,7 @@ export default function SignInSide() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log(data.get('email'))
+    console.log(data.get('password'))
     const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/login', {
       method: 'POST',
       headers: {
