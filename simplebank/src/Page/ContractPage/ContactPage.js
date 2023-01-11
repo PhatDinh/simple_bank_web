@@ -68,7 +68,7 @@ const ContactPage = () => {
                     alignSelf: 'center',
 
                 }}>
-                    <Button variant='contained' size='medium' onclick={addContact} >Add Contact</Button>
+                    <Button variant='contained' size='medium' onClick={addContact} >Add Contact</Button>
                 </Box>
 
             </Box>
