@@ -35,7 +35,7 @@ const CreateTransaction = () => {
     //new transaction id just create
     const [transactionId, setTransctionId] = useState('');
     //new token id just create
-    const [transactionToken , setTransactionToken] = useState('');
+    const [transactionToken, setTransactionToken] = useState('');
 
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
@@ -67,7 +67,7 @@ const CreateTransaction = () => {
 
     const sendSubmit = async () => {
 
-        getAccountId(reciever)
+        console.log(receiverId);
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
             method: 'POST',
             headers: {
@@ -83,7 +83,8 @@ const CreateTransaction = () => {
         }).then(res => {
             console.log(res)
             return res.json();
-        }).then(data=>{
+        }).then(data => {
+            console.log(data)
             setTransctionId(data.id)
             setTransactionToken(data.token)
         })
@@ -97,6 +98,7 @@ const CreateTransaction = () => {
 
     const selectContact = async (event) => {
         setReciever(event.target.value)
+        getAccountId(event.target.value)
         //getBankAccount(receiverId);
 
     }
@@ -127,7 +129,6 @@ const CreateTransaction = () => {
             }).then(res => {
                 return res.json();
             }).then(data => {
-                console.log(data)
                 setReceiverId(data.results[0].id)
             })
     }
@@ -193,7 +194,7 @@ const CreateTransaction = () => {
                     }}>Cancel</Button>
                     <Button variant="contained" size="medium" onClick={sendSubmit}>Submit</Button>
                 </Box>
-                <ConfirmTransaction open={open} bearer={bearer} id={transactionId}></ConfirmTransaction>
+                <ConfirmTransaction open={open} bearer={bearer} id={transactionId} token={transactionToken}></ConfirmTransaction>
 
             </Box>
 

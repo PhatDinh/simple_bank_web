@@ -9,8 +9,7 @@ const ConfirmTransaction = (props) => {
 
 
     //value
-    const { open, bearer, id } = props;
-    const token = localStorage.getItem('token')
+    const { open, bearer, id, token } = props;
 
     const [otp, setOtp] = useState('');
 
@@ -21,7 +20,10 @@ const ConfirmTransaction = (props) => {
     }
 
     const handleSubmit = async () => {
-        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions/${id}}`, {
+        console.log(otp);
+        console.log(id);
+        console.log(token);
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions/confirm-success/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +34,10 @@ const ConfirmTransaction = (props) => {
                 'token': token
             })
         }).then(res => {
-            console.log(res)
+            if (!res.ok) {
+                setWarning(true);
+                console.log(res)
+            }
         })
     }
 
@@ -60,7 +65,7 @@ const ConfirmTransaction = (props) => {
                 }
 
             </Box>
-            <Button variant="contained" sx={{
+            <Button variant="contained" onClick={handleSubmit} sx={{
 
                 width: '50%',
                 marginLeft: 'auto',
