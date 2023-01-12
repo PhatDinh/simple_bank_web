@@ -18,7 +18,7 @@ export default function DebtTable(props) {
 
 
     const movToCreate = () => {
-        navigate('/create-debt')
+        navigate('/create-Debt')
     }
 
     const data = props.debt;
