@@ -28,7 +28,9 @@ const HomePage = () => {
         fetchData();
     }, [])
 
-    return Dashboard();
+    return <Box>
+        <ButtonAppBar/>
+    </Box>
 }
 
 export default HomePage;
