@@ -3,13 +3,11 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import ButtonAppBar from "../../Appbar";
 import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from "react-router-dom";
 
 const ContactPage = () => {
 
 
     const [Contacts, setContacts] = useState([]);
-    const navigate = useNavigate();
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
     const fetchData = async () => {
@@ -31,10 +29,6 @@ const ContactPage = () => {
     useEffect(() => {
         fetchData();
     }, [])
-
-    const addContact = () => {
-        navigate('/create-contact')
-    }
 
     return <Box>
         <ButtonAppBar />
@@ -68,7 +62,7 @@ const ContactPage = () => {
                     alignSelf: 'center',
 
                 }}>
-                    <Button variant='contained' size='medium' onclick={addContact} >Add Contact</Button>
+                    <Button variant='contained' size='medium' >Add Contact</Button>
                 </Box>
 
             </Box>
