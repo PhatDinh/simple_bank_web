@@ -18,15 +18,12 @@ import { useEffect, useState } from "react";
 
 
 
-export default function SignInSide(props) {
+export default function SignInSide() {
 
 
 
   const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-
-
-  //const [forgot] = props;
+  const [password, setPassword] = useState('123456789');
 
 
   const navigate = useNavigate();
@@ -52,7 +49,6 @@ export default function SignInSide(props) {
       if (!res.ok) throw new Error(res.status);
       else return res.json();
     }).then(data => {
-      console.log(data)
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
       navigate('/home');
@@ -146,7 +142,7 @@ export default function SignInSide(props) {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2" onClick={props.forgot}>
+                  <Link href="#" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
