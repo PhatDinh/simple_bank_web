@@ -14,6 +14,8 @@ import ProfilePage from './Page/ProfilePage/ProfilePage';
 import CreateTransaction from './Page/TransactionPage/CreateTransaction';
 import ContractPage from './Page/ContractPage/ContactPage';
 import DebtPage from './Page/DebtPage/DebtPage';
+import CreateContact from './Page/ContractPage/CreateContact';
+import CreateDebt from './Page/DebtPage/CreateDebt';
 //import ContractPage from './Page/ContractPage/ContractPage';
 //import TransactionPage from './Page/TransactionPage/TransactionPage';
 
@@ -28,7 +30,9 @@ root.render(
         <Route path="create-transaction" element={<CreateTransaction />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/contacts" element={<ContractPage />} />
+        <Route path="/create-contact" element={<CreateContact/>}/>
         <Route path="/debts" element={<DebtPage/>} />
+        <Route path="/create-debt" element={<CreateDebt/>}/>
 
       </Routes>
     </BrowserRouter>
