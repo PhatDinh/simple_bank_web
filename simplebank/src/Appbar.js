@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const ButtonAppBar = () => {
+const ButtonAppBar = (props) => {
     const navigate = useNavigate();
 
     const handleClick = (page) => {
@@ -34,7 +34,9 @@ const ButtonAppBar = () => {
         }
     }
 
-    const pages = ['HOME', 'CONTACT', 'TRANSACTION', 'DEBT', 'CHANGE PASSWORD']
+    const {role} = props
+
+    const pages =  (role == 'Admin' || role == 'Employee') ? [''] : ['HOME', 'CONTACT', 'TRANSACTION', 'DEBT']   
 
     return (
         <AppBar position="absolute" open={true}>

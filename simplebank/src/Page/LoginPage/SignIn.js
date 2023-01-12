@@ -15,6 +15,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from "react";
+import { Tab, Tabs } from '@mui/material';
 
 
 
@@ -29,15 +30,32 @@ export default function SignInSide(props) {
   //const [forgot] = props;
 
 
-  const navigate = useNavigate();
+  const [tabIndex, setTabIndex] = useState(0);
+  const labels = ["Customer", "Employee", "Admin",];
 
+  const handleTabChange = (event, newTabIndex) => {
+    setTabIndex(newTabIndex);
+  }
+
+
+
+
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get('email'))
-    console.log(data.get('password'))
+    if (tabIndex == 0) {
+      handleCustomer(data);
+    } else if (tabIndex == 1) {
+      handleEmployee(data);
+    } else if (tabIndex == 2) {
+      handleAdmin(data);
+    }
+  };
+
+  const handleCustomer = async (data) => {
     const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/login', {
       method: 'POST',
       headers: {
@@ -52,25 +70,56 @@ export default function SignInSide(props) {
       if (!res.ok) throw new Error(res.status);
       else return res.json();
     }).then(data => {
-      console.log(data)
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
       navigate('/home');
     })
-  };
-
-  function onChange(value) {
-    console.log("Captcha value:", value);
   }
 
-  function handleUsername(event) {
-    setUsername(event.target.value)
+  const handleEmployee = async (data) => {
+    const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/employee/v1/login', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application-json',
+      },
+      body: JSON.stringify({
+        'username': data.get("email"),
+        'password': data.get("password")
+      })
+    }).then(res => {
+      console.log(res);
+      if (!res.ok) throw new Error(res.status);
+      else return res.json();
+    }).then(data => {
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('refesh', data.refresh_token);
+      navigate('/employee');
+    })
   }
 
-  function handlePassword(event) {
-    console.log(event.target);
-    setPassword(event.target.vaulue)
+  const handleAdmin = async (data) => {
+    const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/admin/v1/login', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application-json',
+      },
+      body: JSON.stringify({
+        'username': data.get("email"),
+        'password': data.get("password")
+      })
+    }).then(res => {
+      console.log(res);
+      if (!res.ok) throw new Error(res.status);
+      else return res.json();
+    }).then(data => {
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('refesh', data.refresh_token);
+      navigate('/admin');
+    })
   }
+
+
+
 
   return (
     <Box>
@@ -106,6 +155,13 @@ export default function SignInSide(props) {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth" textColor='primary'>
+
+              {labels.map((value, index) => {
+                const tabColor = index === tabIndex ? '#ccffd1' : 'white'
+                return <Tab label={value} sx={{ border: 0.25, backgroundColor: tabColor, color: 'black' }} ></Tab>
+              })}
+            </Tabs>
             <Box
               component="form"
               onSubmit={handleSubmit}
