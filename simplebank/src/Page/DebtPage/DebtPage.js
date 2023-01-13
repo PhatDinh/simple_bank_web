@@ -28,6 +28,10 @@ const DebtPage = () => {
         })
     }
 
+
+
+
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -59,7 +63,7 @@ const DebtPage = () => {
                     minWidth: '80vw',
                     minHeight: '50vh'
                 }}>
-                        <DebtTable debt={debts} />
+                        <DebtTable debt={debts} bearer={bearer} />
                     </Box></Paper>
 
             </Box>

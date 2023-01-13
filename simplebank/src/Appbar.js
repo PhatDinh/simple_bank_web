@@ -11,6 +11,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import List from '@mui/material/List';
 import Badge from '@mui/material/Badge';
 import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 
@@ -25,18 +26,20 @@ const ButtonAppBar = (props) => {
             navigate('/profile');
         } else if (page == 'TRANSACTION') {
             navigate('/transactions')
-        } else if (page== 'CONTACT')
-        {
+        } else if (page == 'CONTACT') {
             navigate('/contacts')
-        } else if (page== 'DEBT')
-        {
+        } else if (page == 'DEBT') {
             navigate('/debts')
         }
     }
 
-    const {role} = props
+    const { role } = props
 
-    const pages =  (role == 'Admin' || role == 'Employee') ? [''] : ['HOME', 'CONTACT', 'TRANSACTION', 'DEBT']   
+    const pages = (role == 'Admin' || role == 'Employee') ? [''] : ['HOME', 'CONTACT', 'TRANSACTION', 'DEBT']
+
+    const logOut = () => {
+        navigate('/')
+    }
 
     return (
         <AppBar position="absolute" open={true}>
@@ -69,10 +72,8 @@ const ButtonAppBar = (props) => {
                 </Box>
 
 
-                <IconButton color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
+                <IconButton color="inherit" onClick={logOut}>
+                    <LogoutIcon />
                 </IconButton>
             </Toolbar>
         </AppBar>

@@ -1,4 +1,4 @@
-import { AppBar, CssBaseline, Grid, } from "@mui/material";
+import { AppBar, CssBaseline, Dialog, DialogTitle, Grid, } from "@mui/material";
 import { Box, textAlign } from "@mui/system";
 import { useEffect, useState } from "react";
 import ButtonAppBar from "../../Appbar";
@@ -9,6 +9,9 @@ import Dashboard from "./Dashboard";
 const HomePage = () => {
 
     const [profile, setProfile] = useState();
+
+
+    const [open, setOpen] = useState(false);
 
 
 
@@ -48,7 +51,11 @@ const HomePage = () => {
     function setupEventSource() {
         evtSource = new EventSource(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/stream?token=${localStorage.getItem('token')}`);
         evtSource.onmessage = function (e) {
-            console.log(e.data);
+            console.log(JSON.parse(e.data));
+            if (JSON.parse(e.data) != null) {
+                setOpen(true)
+            }
+
         };
         evtSource.onopen = function (e) {
             reconnectFrequencySeconds = 1;
@@ -63,6 +70,11 @@ const HomePage = () => {
     setupEventSource();
 
 
+    const renderDebt = () => {
+        return <Dialog open={open}>
+            <DialogTitle>Debt </DialogTitle>
+        </Dialog>
+    }
 
 
     useEffect(() => {
@@ -72,7 +84,9 @@ const HomePage = () => {
 
     return <Box>
         <ButtonAppBar />
-        { }
+        <Dialog open={open}>
+            <DialogTitle>Debt </DialogTitle>
+        </Dialog>
     </Box>
 }
 

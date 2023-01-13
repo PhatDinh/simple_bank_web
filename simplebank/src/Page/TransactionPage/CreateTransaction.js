@@ -1,5 +1,5 @@
 import ButtonAppBar from "../../Appbar"
-import { Button, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Button, Checkbox, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
@@ -36,6 +36,9 @@ const CreateTransaction = () => {
     const [transactionId, setTransctionId] = useState('');
     //new token id just create
     const [transactionToken, setTransactionToken] = useState('');
+    //saved contact
+
+    const [saved, setSaved] = useState(false)
 
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
@@ -81,27 +84,11 @@ const CreateTransaction = () => {
         }).then(res => {
             console.log(res)
             return res.json();
-        }).then(  async (data) =>  {
+        }).then(async (data) => {
             console.log(data)
             setTransctionId(data.id)
             setTransactionToken(data.token)
-            await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': bearer
-                },
-                body: JSON.stringify({
-                    "account_number": accountNumber,
-                    "bank_name": bankName,
-                    "suggest_name": name
-                })
-            }).then(res => {
-                console.log(res)
-                return res.json();
-            }).then(data => {
-                console.log(data)
-            })
+
             navigate('/transactions')
         })
         setOpen(true)
@@ -190,6 +177,20 @@ const CreateTransaction = () => {
             }}>
                 <Typography variant='h6' align='start'>Amount</Typography>
                 <TextField onChange={(event) => { setAmount(event.target.value) }} fullWidth value={amount}></TextField>
+
+            </Box>
+            <Box sx={{
+                width: '80vw',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 3,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center'
+
+            }}>
+                <Checkbox label="Save Contact" onChange={() => setSaved(prev => !prev)} /><Typography variant="button">Save Contact</Typography>
+
             </Box>
             <Box sx={{
                 width: '80vw',

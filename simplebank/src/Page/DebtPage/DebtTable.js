@@ -1,5 +1,5 @@
-import * as React from 'react';
-import Link from '@mui/material/Link';
+import { useEffect, useState } from "react";
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,8 +7,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
+import PaymentIcon from '@mui/icons-material/Payment';
+import ClearIcon from '@mui/icons-material/Clear';
 
 
 
@@ -21,10 +23,45 @@ export default function DebtTable(props) {
         navigate('/create-debt')
     }
 
-    const data = props.debt;
+    const [data,bearer] = props.debt;
+
+    
+    const fulfillDebt = async (id) => {
+            await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': bearer
+                }
+            }).then(res => {
+                if (!res.ok) throw new Error(res.status);
+                else return res.json();
+            }).then(data => {
+                console.log(data);
+            })
+    }
+
+    const removeDebt = async (id) => {
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/cancel/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            console.log(data);
+        })
+    }
+
+
+
+   
 
     return (
-        <React.Fragment>
+        <Box>
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'space-between'
@@ -54,11 +91,12 @@ export default function DebtTable(props) {
                                 }</TableCell>
                                 <TableCell >{row.amount}</TableCell>
                                 <TableCell> {row.description}</TableCell>
+                                <TableCell><IconButton onClick={() => fulfillDebt(row.id)}><PaymentIcon /></IconButton><IconButton onClick={() => removeDebt(row.id)}><ClearIcon /></IconButton></TableCell>
                             </TableRow>
                         )
                     })}
                 </TableBody>
             </Table>
-        </React.Fragment>
+        </Box>
     );
 }
