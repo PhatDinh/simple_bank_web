@@ -8,7 +8,10 @@ import Dashboard from "./Dashboard";
 
 const HomePage = () => {
 
-    const [account, setAccount] = useState();
+    const [profile, setProfile] = useState();
+
+
+
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
     const fetchData = async () => {
@@ -21,15 +24,55 @@ const HomePage = () => {
         }).then(res => {
             if (!res.ok) throw new console.error(res);
             return res.json();
-        }).then(data => console.log(data.results))
+        }).then(data => {
+            console.log(data)
+            setProfile(data[0])
+        })
     }
+
+
+    var reconnectFrequencySeconds = 1;
+    var evtSource;
+
+    var waitFunc = function () { return reconnectFrequencySeconds * 1000 };
+    var tryToSetupFunc = function () {
+        setupEventSource();
+        reconnectFrequencySeconds *= 2;
+        if (reconnectFrequencySeconds >= 64) {
+            reconnectFrequencySeconds = 64;
+        }
+    };
+
+    var reconnectFunc = function () { setTimeout(tryToSetupFunc, waitFunc()) };
+
+    function setupEventSource() {
+        evtSource = new EventSource(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/stream?token=${localStorage.getItem('token')}`);
+        evtSource.onmessage = function (e) {
+            console.log(e.data);
+        };
+        evtSource.onopen = function (e) {
+            reconnectFrequencySeconds = 1;
+        };
+        evtSource.onerror = function (e) {
+            evtSource.close();
+            reconnectFunc();
+        };
+    }
+
+
+    setupEventSource();
+
+
+
 
     useEffect(() => {
         fetchData();
+        //registerStream();
     }, [])
 
     return <Box>
-        <ButtonAppBar/>
+        <ButtonAppBar />
+        { }
     </Box>
 }
 

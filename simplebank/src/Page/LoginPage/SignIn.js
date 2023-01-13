@@ -11,11 +11,11 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import ReCAPTCHA from "react-google-recaptcha";
 import { useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from "react";
 import { Tab, Tabs } from '@mui/material';
+import ReCAPTCHA from 'react-google-recaptcha'
 
 
 
@@ -25,6 +25,8 @@ export default function SignInSide(props) {
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+
+  const [check, setCheck] = useState(false)
 
 
   //const [forgot] = props;
@@ -72,9 +74,12 @@ export default function SignInSide(props) {
     }).then(data => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
+
       navigate('/home');
     })
   }
+
+
 
   const handleEmployee = async (data) => {
     const login = await fetch('https://infinite-beyond-71487.herokuapp.com/api/employee/v1/login', {
@@ -116,6 +121,10 @@ export default function SignInSide(props) {
       localStorage.setItem('refesh', data.refresh_token);
       navigate('/admin');
     })
+  }
+
+  const handleCaptcha = () => {
+
   }
 
 
@@ -188,10 +197,6 @@ export default function SignInSide(props) {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Button
                 type="submit"
                 fullWidth
@@ -200,15 +205,21 @@ export default function SignInSide(props) {
               >
                 Sign In
               </Button>
+              <Box sx={{
+
+              }}>
+                <ReCAPTCHA
+                  sitekey="6LcoOfIjAAAAAOhntIUdgpSEvpBZrDkPw-Phe0nA"
+                  onChange={handleCaptcha}
+                  size='normal'
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                />
+              </Box>
+
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2" onClick={props.forgot}>
                     Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>

@@ -1,9 +1,10 @@
-import { TableContainer, Table, TableRow, TableCell, TableBody, TableHead, InputAdornment, TextField, Button } from "@mui/material";
+import { TableContainer, Table, TableRow, TableCell, TableBody, TableHead, InputAdornment, TextField, Button, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import ButtonAppBar from "../../Appbar";
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from "react-router-dom";
+import ClearIcon from '@mui/icons-material/Clear';
 
 const ContactPage = () => {
 
@@ -23,7 +24,7 @@ const ContactPage = () => {
             if (!res.ok) throw new console.error(res);
             return res.json();
         }).then(data => {
-
+            console.log(data);
             setContacts(data.results)
         })
     }
@@ -34,6 +35,24 @@ const ContactPage = () => {
 
     const addContact = () => {
         navigate('/create-contact')
+    }
+
+    const deleteContact = async (id) => {
+        console.log(id)
+        console.log(Contacts)
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new console.error(res);
+            setContacts(prev => {
+               return prev.filter(value=>value.id!= id)
+            })
+            return res.json();
+        })
     }
 
     return <Box>
@@ -123,6 +142,9 @@ const ContactPage = () => {
                                     <TableCell sx={{
                                         borderBottom: 'none',
                                     }}>{e.bank_name}
+                                    </TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={() => deleteContact(e.id)}><ClearIcon /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             })

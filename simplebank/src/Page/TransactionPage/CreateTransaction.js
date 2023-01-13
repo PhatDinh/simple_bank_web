@@ -66,8 +66,6 @@ const CreateTransaction = () => {
 
 
     const sendSubmit = async () => {
-
-        console.log(receiverId);
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
             method: 'POST',
             headers: {
@@ -83,10 +81,28 @@ const CreateTransaction = () => {
         }).then(res => {
             console.log(res)
             return res.json();
-        }).then(data => {
+        }).then(  async (data) =>  {
             console.log(data)
             setTransctionId(data.id)
             setTransactionToken(data.token)
+            await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': bearer
+                },
+                body: JSON.stringify({
+                    "account_number": accountNumber,
+                    "bank_name": bankName,
+                    "suggest_name": name
+                })
+            }).then(res => {
+                console.log(res)
+                return res.json();
+            }).then(data => {
+                console.log(data)
+            })
+            navigate('/transactions')
         })
         setOpen(true)
     }
