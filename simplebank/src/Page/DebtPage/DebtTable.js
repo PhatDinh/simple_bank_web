@@ -11,6 +11,7 @@ import { Button, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ClearIcon from '@mui/icons-material/Clear';
+import ConfirmDebt from "./ConfirmDebt";
 
 
 
@@ -23,22 +24,33 @@ export default function DebtTable(props) {
         navigate('/create-debt')
     }
 
-    const [data,bearer] = props.debt;
+    const [data, bearer] = props.debt;
 
-    
+
+    //open confirm otp dialog
+    const [open, setOpen] = useState(false)
+
+    const [debtToken,setDebtToken] = useState('');
+
+    const [debtId,setDebtId] = useState('');
+
+
     const fulfillDebt = async (id) => {
-            await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': bearer
-                }
-            }).then(res => {
-                if (!res.ok) throw new Error(res.status);
-                else return res.json();
-            }).then(data => {
-                console.log(data);
-            })
+        console.log(id)
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            console.log(data);
+            setDebtId(id);
+            setDebtToken(data.token)
+        })
     }
 
     const removeDebt = async (id) => {
@@ -58,7 +70,7 @@ export default function DebtTable(props) {
 
 
 
-   
+
 
     return (
         <Box>
@@ -97,6 +109,7 @@ export default function DebtTable(props) {
                     })}
                 </TableBody>
             </Table>
+            <ConfirmDebt open={open} bearer={bearer} id={debtId} token={debtToken}></ConfirmDebt>
         </Box>
     );
 }

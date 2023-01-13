@@ -4,11 +4,12 @@ import DebtTable from "./DebtTable";
 import ButtonAppBar from "../../Appbar";
 import { Box } from "@mui/system";
 import { Paper } from "@mui/material";
+import tokenStore from "../tokenStore";
 
 
 const DebtPage = () => {
 
-    const bearer = 'bearer ' + localStorage.getItem('token')
+    const bearer = 'bearer ' + tokenStore.accessToken;
 
     const [debts, setDebts] = useState([]);
 

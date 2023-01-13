@@ -16,6 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { Tab, Tabs } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha'
+import tokenStore from '../tokenStore';
+
+
+
 
 
 
@@ -27,6 +31,7 @@ export default function SignInSide(props) {
   const [password, setPassword] = useState();
 
   const [check, setCheck] = useState(false)
+
 
 
   //const [forgot] = props;
@@ -74,6 +79,8 @@ export default function SignInSide(props) {
     }).then(data => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
+      tokenStore.accessToken = data.access_token;
+      tokenStore.refreshToken = data.refresh_token
 
       navigate('/home');
     })

@@ -21,6 +21,10 @@ export default function TransactionTable(props) {
         navigate('/create-transaction')
     }
 
+    const moveToTransfer = () => {
+        navigate('/create-bank-transfer')
+    }
+
     const data = props.transaction;
     console.log(props.transaction)
 
@@ -31,8 +35,14 @@ export default function TransactionTable(props) {
                 justifyContent: 'space-between'
             }}>
                 <Title>All Transactions</Title>
-                <Button sx={{
-                }} variant='contained' size='small' onClick={movToCreate}>Create Transaction</Button>
+                <Box>
+                    <Button sx={{
+                        marginRight: 2
+                    }} variant='contained' size='small' onClick={movToCreate}>Create Transaction</Button>
+                    <Button sx={{
+                    }} variant='contained' size='small' onClick={movToCreate}>Bank transfer</Button>
+                </Box>
+
             </Box>
             <Table size="large">
                 <TableHead>

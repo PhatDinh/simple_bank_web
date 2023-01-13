@@ -12,15 +12,19 @@ import { Box } from "@mui/system";
 import TransactionTable from "./TransactionTable";
 import { ThemeProvider } from "@emotion/react";
 import { useEffect, useState } from "react";
+import tokenStore from "../tokenStore";
 
 
 const mdTheme = createTheme();
 
 const TransactionPage = () => {
 
-    const bearer = 'bearer ' + localStorage.getItem('token')
+    const bearer = 'bearer ' + tokenStore.accessToken
 
     const [transactions, setTransactions] = useState([]);
+
+
+
 
 
     const fetchData = async () => {

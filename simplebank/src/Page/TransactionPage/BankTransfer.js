@@ -4,9 +4,10 @@ import { Box } from "@mui/system"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import ConfirmTransaction from "./ConfirmTransaction";
+import ConfirmBankTransfer from "./ConfirmBankTransfer";
 
 
-const CreateTransaction = () => {
+const BankTransfer = () => {
 
 
     const navigate = useNavigate();
@@ -72,7 +73,7 @@ const CreateTransaction = () => {
 
 
     const sendSubmit = async () => {
-        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions/tp-bank', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -236,7 +237,7 @@ const CreateTransaction = () => {
                     }}>Cancel</Button>
                     <Button variant="contained" size="medium" onClick={sendSubmit}>Submit</Button>
                 </Box>
-                <ConfirmTransaction open={open} bearer={bearer} id={transactionId} token={transactionToken}></ConfirmTransaction>
+                <ConfirmBankTransfer open={open} bearer={bearer} id={transactionId} token={transactionToken}></ConfirmBankTransfer>
 
             </Box>
 
@@ -247,4 +248,4 @@ const CreateTransaction = () => {
 }
 
 
-export default CreateTransaction
+export default BankTransfer

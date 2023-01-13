@@ -19,6 +19,8 @@ const CreateDebt = () => {
     const [desc, setDesc] = useState();
     //const [id, setId] = useState();
 
+    
+
     const goBack = () => {
         navigate(-1);
     }

@@ -5,6 +5,7 @@ import ButtonAppBar from "../../Appbar";
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from "react-router-dom";
 import ClearIcon from '@mui/icons-material/Clear';
+import tokenStore from "../tokenStore";
 
 const ContactPage = () => {
 
@@ -12,7 +13,7 @@ const ContactPage = () => {
     const [Contacts, setContacts] = useState([]);
     const navigate = useNavigate();
 
-    const bearer = 'Bearer ' + localStorage.getItem('token')
+    const bearer = 'Bearer ' + tokenStore.accessToken;
     const fetchData = async () => {
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
             method: 'GET',
@@ -49,7 +50,7 @@ const ContactPage = () => {
         }).then(res => {
             if (!res.ok) throw new console.error(res);
             setContacts(prev => {
-               return prev.filter(value=>value.id!= id)
+                return prev.filter(value => value.id != id)
             })
             return res.json();
         })
