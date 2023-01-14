@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Box } from '@mui/system';
+
 
 
 
@@ -18,6 +19,9 @@ export default function TransactionTable(props) {
 
     const data = props.transactions;
 
+
+    const [bank, setBank] = React.useState('');
+
     return (
         <React.Fragment>
             <Box sx={{
@@ -26,30 +30,37 @@ export default function TransactionTable(props) {
             }}>
                 <Title>All Transaction</Title>
                 <Box>
-
+                    <TextField label="Input Bank" onChange={(e) => setBank(e.target.value)}></TextField>
                 </Box>
 
             </Box>
             <Table size="large">
                 <TableHead>
                     <TableRow>
-                        <TableCell>First Name</TableCell>
-                        <TableCell>Last Name</TableCell>
-                        <TableCell>Username</TableCell>
-                        <TableCell>Status</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Sender</TableCell>
+                        <TableCell>Reciever</TableCell>
+                        <TableCell>Amount</TableCell>
+                        <TableCell>Description</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {data?.map((row) => {
-                        return (
-                            <TableRow key={row.id}>
-                                <TableCell>{row.first_name}</TableCell>
-                                <TableCell>{row.last_name}</TableCell>
-                                <TableCell>{row.username
-                                }</TableCell>
-                                <TableCell >{row.is_active ? 'Active' : 'Unactive'}</TableCell>
-                            </TableRow>
-                        )
+                        const date = row.create_time.slice(0, row.create_time.indexOf('T'))
+
+                        const table = (<TableRow key={row.id}>
+                            <TableCell>{date}</TableCell>
+                            <TableCell>{row.sender_name}</TableCell>
+                            <TableCell>{row.receiver_name
+                            }</TableCell>
+                            <TableCell >{row.amount}</TableCell>
+                            <TableCell> {row.description}</TableCell>
+                        </TableRow>)
+
+                        if (bank == '') {
+                            return table
+                        }
+                        else if (row.receiver_bank_name == bank || row.sender_bank_name == bank) return table
                     })}
                 </TableBody>
             </Table>

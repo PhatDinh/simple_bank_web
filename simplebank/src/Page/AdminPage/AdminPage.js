@@ -11,6 +11,7 @@ import TransactionTable from "./TransactionTable";
 const AdminPage = () => {
 
     const [employees, setEmployees] = useState([]);
+    const [transactions, setTransactions] = useState([]);
 
     const [tabIndex, setTabIndex] = useState(0);
     const labels = ["Transaction", "Employee"];
@@ -42,7 +43,7 @@ const AdminPage = () => {
     }
 
     const fetchTransaction = async () => {
-        await fetch('https://infinite-beyond-71487.herokuapp.com/api/admin/v1/employees', {
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/admin/v1/transactions', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ const AdminPage = () => {
             else if (!res.ok) console.log(res)
             else return res.json();
         }).then(data => {
-            setEmployees(data.results)
+            setTransactions(data.results)
             console.log(data)
         })
     }
@@ -63,6 +64,7 @@ const AdminPage = () => {
 
     useEffect(() => {
         fetchData();
+        fetchTransaction();
     }, [])
 
 
@@ -96,7 +98,7 @@ const AdminPage = () => {
                 minHeight: '50vh',
                 marginTop: 15
             }}>
-                {tabIndex == 1 ? <EmployeeTable employees={employees} /> : <TransactionTable />}
+                {tabIndex == 1 ? <EmployeeTable employees={employees} bearer={bearer}/> : <TransactionTable transactions={transactions} />}
             </Box>
 
         </Box>

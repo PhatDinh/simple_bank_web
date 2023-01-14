@@ -1,12 +1,10 @@
-import { AppBar, Button, CssBaseline, Dialog, DialogTitle, Grid, Paper, Typography, } from "@mui/material";
+import { AppBar, Button, CssBaseline, Dialog, DialogTitle, Grid, Paper, TextField, Typography, } from "@mui/material";
 import { Box, textAlign } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import ButtonAppBar from "../../Appbar";
 import tokenStore from '../tokenStore';
 
-import Dashboard from "./Dashboard";
-import Deposits from "./Deposits";
 import Title from "./Title";
 
 
@@ -15,10 +13,47 @@ const HomePage = () => {
 
     const [profile, setProfile] = useState();
 
-
-    const [open, setOpen] = useState(false);
-
     const navigate = useNavigate();
+
+    const [debt, setDebt] = useState({})
+    const [debtToken, setDebtToken] = useState()
+    const [otp, setOtp] = useState('')
+
+
+
+    const getOTP = async () => {
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill/${tokenStore.notifyId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            console.log(data);
+            setDebtToken(data.token)
+        })
+    }
+
+    const handleSubmit = async () => {
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill-with-token/${tokenStore.notifyId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "otp": otp,
+                'token': debtToken
+            })
+        }).then(res => {
+            if (!res.ok) {
+                console.log(res)
+            }
+        })
+    }
 
 
 
@@ -27,7 +62,6 @@ const HomePage = () => {
 
 
     const fetchData = async () => {
-        console.log('token: ' + tokenStore.accessToken)
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts', {
             method: 'GET',
             headers: {
@@ -43,7 +77,6 @@ const HomePage = () => {
             }
             return res.json();
         }).then(data => {
-            console.log(data)
             setProfile(data.results[0])
         })
     }
@@ -65,10 +98,12 @@ const HomePage = () => {
     }
 
 
+
+
     var reconnectFrequencySeconds = 1;
     var evtSource;
 
-    var waitFunc = function () { return reconnectFrequencySeconds * 2000 };
+    var waitFunc = function () { return reconnectFrequencySeconds * 1000 };
     var tryToSetupFunc = function () {
         setupEventSource();
         reconnectFrequencySeconds *= 2;
@@ -81,9 +116,27 @@ const HomePage = () => {
 
     function setupEventSource() {
         evtSource = new EventSource(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/stream?token=${tokenStore.accessToken}`);
-        evtSource.onmessage = function (e) {
-            if (JSON.parse(e.data) != null) {
-                setOpen(true)
+
+        evtSource.onmessage = async function (e) {
+            if (tokenStore.notifyId == '') {
+                const temp = JSON.parse(e.data)
+                tokenStore.notifyId = temp.message;
+                await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/${tokenStore.notifyId}`, {
+                    method: 'GET',
+                    headers: {
+                        'content-type': 'application-json',
+                        'Authorization': 'Bearer ' + tokenStore.accessToken
+                    },
+                }).then(res => {
+                    if (!res.ok) throw new console.error(res);
+                    else return res.json();
+                }).then(data => {
+                    setDebt(data)
+                    tokenStore.openDialog = true;
+                }
+                )
+
+
             }
 
         };
@@ -100,11 +153,8 @@ const HomePage = () => {
     setupEventSource();
 
 
-    const renderDebt = () => {
-        return <Dialog open={open}>
-            <DialogTitle>Debt </DialogTitle>
-        </Dialog>
-    }
+
+
 
 
     useEffect(() => {
@@ -149,8 +199,46 @@ const HomePage = () => {
             }}>Change Password</Button>
             <Button variant="contained" onClick={() => deleteAccount(profile?.id)}>Deactive Account</Button>
         </Box>
-        <Dialog open={open}>
-            <DialogTitle>Debt </DialogTitle>
+        <Dialog open={tokenStore.openDialog}>
+            <DialogTitle>Debt Notify </DialogTitle>
+            <Box sx={{
+                margin: 5
+            }}>
+                <Typography sx={{
+
+                }}>Name: {debt.owner_name} </Typography>
+                <Typography sx={{
+                    marginTop: 1,
+                    marginBottom: 1
+                }}>Amount: {debt.amount}</Typography>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
+                    <TextField placeholder="Input your OTP" variant="outlined"  ></TextField>
+                    <Button onClick={getOTP}>Send OTP</Button>
+                </Box>
+
+            </Box>
+            <Box sx={{
+                width: '50%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 5,
+                display: 'flex',
+                flexDirection: 'row',
+            }}>
+                <Button variant="contained" onClick={handleSubmit} sx={{
+                    marginRight: 2
+
+                }}>Submit</Button>
+                <Button variant="contained" onClick={() => {
+                    tokenStore.resetNotify();
+                    navigate('/debts')
+                }}>Close</Button>
+            </Box>
+
         </Dialog>
     </Box>
 }

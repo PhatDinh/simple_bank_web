@@ -7,8 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
+import ClearIcon from '@mui/icons-material/Clear';
 
 
 
@@ -17,6 +18,24 @@ export default function EmployeeTable(props) {
     const navigate = useNavigate();
 
     const data = props.employees;
+    const bearer = props.bearer;
+
+
+
+    const deleteEmployee = async (id) => {
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/admin/v1/employees/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            }
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            console.log(data);
+        })
+    }
 
     return (
         <React.Fragment>
@@ -49,6 +68,7 @@ export default function EmployeeTable(props) {
                                 <TableCell>{row.username
                                 }</TableCell>
                                 <TableCell >{row.is_active ? 'Active' : 'Unactive'}</TableCell>
+                                <TableCell><IconButton onClick={()=>deleteEmployee(row.id)}><ClearIcon/></IconButton></TableCell>
                             </TableRow>
                         )
                     })}
