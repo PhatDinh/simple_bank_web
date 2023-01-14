@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogTitle, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system";
 import { useState } from "react"
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 
@@ -9,11 +10,13 @@ const ConfirmBankTransfer = (props) => {
 
 
     //value
-    const { open, bearer, id, token } = props;
+    const { open, bearer, id, token, check, reciever } = props;
 
     const [otp, setOtp] = useState('');
 
     const [warning, setWarning] = useState(false)
+
+    const navigate= useNavigate();
 
     const handleOtp = (event) => {
         setOtp(event.target.value)
@@ -38,6 +41,31 @@ const ConfirmBankTransfer = (props) => {
                 setWarning(true);
                 console.log(res)
             }
+        }).then(data => {
+            if (check == true) {
+                addContact();
+            }
+            navigate('/transactions')
+        }
+        )
+    }
+
+    const addContact = async () => {
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "account_number": reciever,
+                "suggest_name": ''
+            })
+        }).then(res => {
+            console.log(res)
+            return res.json();
+        }).then(data => {
+            console.log(data)
         })
     }
 

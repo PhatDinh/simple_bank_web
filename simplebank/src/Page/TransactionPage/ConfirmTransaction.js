@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogTitle, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -14,6 +15,7 @@ const ConfirmTransaction = (props) => {
     const [otp, setOtp] = useState('');
 
     const [warning, setWarning] = useState(false)
+    const navigate = useNavigate();
 
     const handleOtp = (event) => {
         setOtp(event.target.value)
@@ -38,6 +40,8 @@ const ConfirmTransaction = (props) => {
                 setWarning(true);
                 console.log(res)
             }
+        }).then(data => {
+            navigate('/transactions')
         })
     }
 

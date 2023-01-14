@@ -6,7 +6,7 @@ import ButtonAppBar from "../../Appbar";
 import CancelDialog from "../NotifyDialog/CancelDialog";
 import CreateDialog from "../NotifyDialog/CreateDialog";
 import FulfillDialog from "../NotifyDialog/FulfillDialog";
-import tokenStore from '../tokenStore';
+import tokenStore from '../../store/tokenStore';
 
 import Title from "./Title";
 

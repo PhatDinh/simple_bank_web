@@ -5,7 +5,7 @@ import ButtonAppBar from "../../Appbar";
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from "react-router-dom";
 import ClearIcon from '@mui/icons-material/Clear';
-import tokenStore from "../tokenStore";
+import tokenStore from "../../store/tokenStore";
 
 const ContactPage = () => {
 

@@ -4,7 +4,7 @@ import DebtTable from "./DebtTable";
 import ButtonAppBar from "../../Appbar";
 import { Box } from "@mui/system";
 import { Paper } from "@mui/material";
-import tokenStore from "../tokenStore";
+import tokenStore from "../../store/tokenStore";
 
 
 const DebtPage = () => {
@@ -37,7 +37,7 @@ const DebtPage = () => {
         fetchData();
     }, [])
 
-    
+
 
 
     return (

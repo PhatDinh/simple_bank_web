@@ -4,11 +4,12 @@ import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import tokenStore from "../../store/tokenStore";
 
 
 const CreateCustomer = () => {
     const navigate = useNavigate();
-    const bearer = 'Bearer ' + localStorage.getItem('token')
+    const bearer = 'Bearer ' + tokenStore.accessToken
 
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -38,6 +39,7 @@ const CreateCustomer = () => {
             return res.json();
         }).then(data => {
             console.log(data)
+            navigate('/employee')
         })
     }
 
@@ -103,7 +105,7 @@ const CreateCustomer = () => {
                     </Box>
                 </Box>
 
-                
+
 
             </Box>
         </Box>

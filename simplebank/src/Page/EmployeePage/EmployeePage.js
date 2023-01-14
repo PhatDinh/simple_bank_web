@@ -14,6 +14,7 @@ import Title from '../HomePage/Title';
 import { useNavigate } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, IconButton, Paper, TextField, Typography } from '@mui/material';
 import AddCardIcon from '@mui/icons-material/AddCard';
+import tokenStore from "../../store/tokenStore";
 
 
 
@@ -26,7 +27,7 @@ const EmployeePage = () => {
     const [depositId, setDepositId] = useState('');
 
 
-    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const bearer = 'Bearer ' + tokenStore.accessToken;
 
     const navigate = useNavigate();
 
@@ -79,7 +80,7 @@ const EmployeePage = () => {
             else return res.json();
         }).then(data => {
             console.log(data);
-            setOpen(false)
+            navigate('/employee')
         })
     }
 

@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { Tab, Tabs } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha'
-import tokenStore from '../tokenStore';
+import tokenStore from '../../store/tokenStore';
 
 
 
@@ -105,6 +105,8 @@ export default function SignInSide(props) {
     }).then(data => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
+      tokenStore.accessToken = data.access_token;
+      tokenStore.refreshToken = data.refresh_token
       navigate('/employee');
     })
   }
@@ -126,6 +128,8 @@ export default function SignInSide(props) {
     }).then(data => {
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('refesh', data.refresh_token);
+      tokenStore.accessToken = data.access_token;
+      tokenStore.refreshToken = data.refresh_token
       navigate('/admin');
     })
   }

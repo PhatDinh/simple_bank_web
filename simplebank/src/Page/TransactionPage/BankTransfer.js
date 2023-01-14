@@ -42,6 +42,8 @@ const BankTransfer = () => {
     const [transactionToken, setTransactionToken] = useState('');
     //saved contact
 
+    const [name,setName] = useState('');
+
     const [saved, setSaved] = useState(false)
 
 
@@ -96,6 +98,7 @@ const BankTransfer = () => {
                 console.log(data)
                 setTransctionId(data.id)
                 setTransactionToken(data.token)
+                setName(data.receiver_name)
                 setOpen(true)
             })
         }
@@ -254,7 +257,7 @@ const BankTransfer = () => {
                     }}>Cancel</Button>
                     <Button variant="contained" size="medium" onClick={sendSubmit}>Submit</Button>
                 </Box>
-                <ConfirmBankTransfer open={open} bearer={bearer} id={transactionId} token={transactionToken}></ConfirmBankTransfer>
+                <ConfirmBankTransfer open={open} bearer={bearer} id={transactionId} token={transactionToken} check={saved} reciever={reciever} name={name}></ConfirmBankTransfer>
 
             </Box>
 

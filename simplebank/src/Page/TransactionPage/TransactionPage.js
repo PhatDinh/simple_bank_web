@@ -11,7 +11,7 @@ import { Box } from "@mui/system";
 import TransactionTable from "./TransactionTable";
 import { ThemeProvider } from "@emotion/react";
 import { useEffect, useState } from "react";
-import tokenStore from "../tokenStore";
+import tokenStore from "../../store/tokenStore";
 
 
 const mdTheme = createTheme();

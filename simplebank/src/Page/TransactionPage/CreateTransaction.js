@@ -91,10 +91,9 @@ const CreateTransaction = () => {
             console.log(data)
             setTransctionId(data.id)
             setTransactionToken(data.token)
-
-            navigate('/transactions')
+            setOpen(true)
         })
-        setOpen(true)
+
     }
 
     const goBack = () => {

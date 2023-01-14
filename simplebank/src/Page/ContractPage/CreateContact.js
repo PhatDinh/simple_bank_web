@@ -31,7 +31,7 @@ const CreateContact = () => {
             },
             body: JSON.stringify({
                 "account_number": accountNumber,
-                "bank_name": bankName,
+
                 "suggest_name": name
             })
         }).then(res => {
@@ -39,6 +39,7 @@ const CreateContact = () => {
             return res.json();
         }).then(data => {
             console.log(data)
+            navigate('/contacts')
         })
     }
 
@@ -73,16 +74,7 @@ const CreateContact = () => {
                     <Typography variant='h6' align='start'>Name</Typography>
                     <TextField onChange={(event) => { setName(event.target.value) }} fullWidth value={name}></TextField>
                 </Box>
-                <Box sx={{
-                    width: '80vw',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    marginTop: 10,
 
-                }}>
-                    <Typography variant='h6' align='start'>Bank Name</Typography>
-                    <TextField onChange={(event) => { setBankName(event.target.value) }} fullWidth value={bankName}></TextField>
-                </Box>
                 <Box sx={{
                     width: '80vw',
                     marginLeft: 'auto',
