@@ -3,6 +3,9 @@ import { Box, textAlign } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import ButtonAppBar from "../../Appbar";
+import CancelDialog from "../NotifyDialog/CancelDialog";
+import CreateDialog from "../NotifyDialog/CreateDialog";
+import FulfillDialog from "../NotifyDialog/FulfillDialog";
 import tokenStore from '../tokenStore';
 
 import Title from "./Title";
@@ -38,6 +41,8 @@ const HomePage = () => {
     }
 
     const handleSubmit = async () => {
+        console.log(debtToken)
+        console.log(otp)
         await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill-with-token/${tokenStore.notifyId}`, {
             method: 'PUT',
             headers: {
@@ -51,6 +56,7 @@ const HomePage = () => {
         }).then(res => {
             if (!res.ok) {
                 console.log(res)
+                navigate('/home')
             }
         })
     }
@@ -118,9 +124,22 @@ const HomePage = () => {
         evtSource = new EventSource(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/stream?token=${tokenStore.accessToken}`);
 
         evtSource.onmessage = async function (e) {
+            console.log(JSON.parse(e.data))
+            console.log(tokenStore.notifyId)
             if (tokenStore.notifyId == '') {
                 const temp = JSON.parse(e.data)
                 tokenStore.notifyId = temp.message;
+
+                if (temp.event == 'debt_created') {
+                    tokenStore.typeDialog = 'create'
+                } else if (temp.event == 'debt_canceled') {
+                    console.log('cancel'
+                    )
+                    tokenStore.typeDialog = 'cancel'
+                } else if (temp.event == 'debt_fulfilled') {
+                    tokenStore.typeDialog = 'fulfill'
+                }
+
                 await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/${tokenStore.notifyId}`, {
                     method: 'GET',
                     headers: {
@@ -175,7 +194,7 @@ const HomePage = () => {
         }}>
             <Title>Account Balance:</Title>
             <Typography component="p" variant="h4">
-                {profile?.cash_in}
+                {profile?.cash_in - profile?.cash_out}
             </Typography>
             <Title>Account Number:</Title>
             <Typography component="p" variant="h4">
@@ -199,47 +218,10 @@ const HomePage = () => {
             }}>Change Password</Button>
             <Button variant="contained" onClick={() => deleteAccount(profile?.id)}>Deactive Account</Button>
         </Box>
-        <Dialog open={tokenStore.openDialog}>
-            <DialogTitle>Debt Notify </DialogTitle>
-            <Box sx={{
-                margin: 5
-            }}>
-                <Typography sx={{
+        {
+            (tokenStore.typeDialog == 'create') ? <CreateDialog bearer={bearer} debt={debt} /> : (tokenStore.typeDialog == 'cancel') ? <CancelDialog debt={debt} /> : (tokenStore.typeDialog == 'fulfill') ? <FulfillDialog debt={debt} /> : ''
+        }
 
-                }}>Name: {debt.owner_name} </Typography>
-                <Typography sx={{
-                    marginTop: 1,
-                    marginBottom: 1
-                }}>Amount: {debt.amount}</Typography>
-                <Box sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center'
-                }}>
-                    <TextField placeholder="Input your OTP" variant="outlined"  ></TextField>
-                    <Button onClick={getOTP}>Send OTP</Button>
-                </Box>
-
-            </Box>
-            <Box sx={{
-                width: '50%',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginBottom: 5,
-                display: 'flex',
-                flexDirection: 'row',
-            }}>
-                <Button variant="contained" onClick={handleSubmit} sx={{
-                    marginRight: 2
-
-                }}>Submit</Button>
-                <Button variant="contained" onClick={() => {
-                    tokenStore.resetNotify();
-                    navigate('/debts')
-                }}>Close</Button>
-            </Box>
-
-        </Dialog>
     </Box>
 }
 

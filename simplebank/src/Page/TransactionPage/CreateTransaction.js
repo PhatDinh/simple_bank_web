@@ -139,25 +139,24 @@ const CreateTransaction = () => {
             })
     }
 
-    // const addContact = async () => {
-    //     await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': bearer
-    //         },
-    //         body: JSON.stringify({
-    //             "account_number": reciever,
-    //             "bank_name": bankName,
-    //             "suggest_name": name
-    //         })
-    //     }).then(res => {
-    //         console.log(res)
-    //         return res.json();
-    //     }).then(data => {
-    //         console.log(data)
-    //     })
-    // }
+    const addContact = async () => {
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "account_number": reciever,
+                "suggest_name": ''
+            })
+        }).then(res => {
+            console.log(res)
+            return res.json();
+        }).then(data => {
+            console.log(data)
+        })
+    }
 
 
 

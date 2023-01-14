@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogTitle, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system";
 import { useState } from "react"
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 
@@ -10,6 +11,7 @@ const ConfirmDebt = (props) => {
 
     //value
     const { open, bearer, id, token } = props;
+    const navigate = useNavigate();
 
     const [otp, setOtp] = useState('');
 
@@ -38,7 +40,8 @@ const ConfirmDebt = (props) => {
                 setWarning(true);
                 console.log(res)
             }
-        })
+
+        }).then(data => navigate('/debts'))
     }
 
 

@@ -7,6 +7,7 @@ class TokenStore {
     refreshToken = '';
     notifyId = '';
     openDialog = false;
+    typeDialog = null
 
     constructor() {
         makeAutoObservable(this)

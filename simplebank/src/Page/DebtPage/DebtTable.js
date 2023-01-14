@@ -24,15 +24,17 @@ export default function DebtTable(props) {
         navigate('/create-debt')
     }
 
-    const [data, bearer] = props.debt;
+    const data = props.debt;
+
+    const bearer = props.bearer;
 
 
     //open confirm otp dialog
     const [open, setOpen] = useState(false)
 
-    const [debtToken,setDebtToken] = useState('');
+    const [debtToken, setDebtToken] = useState('');
 
-    const [debtId,setDebtId] = useState('');
+    const [debtId, setDebtId] = useState('');
 
 
     const fulfillDebt = async (id) => {
@@ -50,6 +52,7 @@ export default function DebtTable(props) {
             console.log(data);
             setDebtId(id);
             setDebtToken(data.token)
+            setOpen(true)
         })
     }
 
@@ -59,7 +62,10 @@ export default function DebtTable(props) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': bearer
-            }
+            },
+            body: JSON.stringify({
+                "description": "test"
+            })
         }).then(res => {
             if (!res.ok) throw new Error(res.status);
             else return res.json();
@@ -90,6 +96,7 @@ export default function DebtTable(props) {
                         <TableCell>Reciever</TableCell>
                         <TableCell>Amount</TableCell>
                         <TableCell>Description</TableCell>
+                        <TableCell>Status</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -103,6 +110,7 @@ export default function DebtTable(props) {
                                 }</TableCell>
                                 <TableCell >{row.amount}</TableCell>
                                 <TableCell> {row.description}</TableCell>
+                                <TableCell> {row.status}</TableCell>
                                 <TableCell><IconButton onClick={() => fulfillDebt(row.id)}><PaymentIcon /></IconButton><IconButton onClick={() => removeDebt(row.id)}><ClearIcon /></IconButton></TableCell>
                             </TableRow>
                         )

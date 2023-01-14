@@ -73,29 +73,33 @@ const BankTransfer = () => {
 
 
     const sendSubmit = async () => {
-        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions/tp-bank', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': bearer
-            },
-            body: JSON.stringify({
-                'amount': amount,
-                'description': 'test',
-                "is_fee_paid_by_me": true,
-                "receiver_id": receiverId
+        //const id = await getAccountId();
+        //console.log('id' + id)
+        const sendData = async () =>
+        {
+            await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions/tp-bank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': bearer
+                },
+                body: JSON.stringify({
+                    "account_number": reciever,
+                    "amount": amount,
+                    "description": "test",
+                    "is_fee_paid_by_me": true
+                })
+            }).then(res => {
+                console.log(res)
+                return res.json();
+            }).then(async (data) => {
+                console.log(data)
+                setTransctionId(data.id)
+                setTransactionToken(data.token)
+                setOpen(true)
             })
-        }).then(res => {
-            console.log(res)
-            return res.json();
-        }).then(async (data) => {
-            console.log(data)
-            setTransctionId(data.id)
-            setTransactionToken(data.token)
-
-            navigate('/transactions')
-        })
-        setOpen(true)
+        }
+       sendData();
     }
 
     const goBack = () => {
@@ -105,7 +109,7 @@ const BankTransfer = () => {
 
     const selectContact = async (event) => {
         setReciever(event.target.value)
-        getAccountId(event.target.value)
+        //getAccountId(event.target.value)
         getBankAccount(receiverId);
 
     }
@@ -125,8 +129,8 @@ const BankTransfer = () => {
 
     }
 
-    const getAccountId = async (account_number) => {
-        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts/guest?account_number=${account_number}`
+    const getAccountId = () => {
+        return fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts/tp-bank/${reciever}`
             , {
                 method: 'GET',
                 headers: {
@@ -136,7 +140,9 @@ const BankTransfer = () => {
             }).then(res => {
                 return res.json();
             }).then(data => {
-                setReceiverId(data.results[0].id)
+                //setReceiverId(data.results[0].id)
+                console.log(data)
+                //return data.results[0].id
             })
     }
 

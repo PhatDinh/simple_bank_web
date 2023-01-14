@@ -4,7 +4,6 @@ import './index.css';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
-import { store } from './store'
 import reportWebVitals from './reportWebVitals';
 import LoginPage from './Page/LoginPage/LoginPage';
 import App from './App';

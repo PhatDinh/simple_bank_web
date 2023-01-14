@@ -21,7 +21,7 @@ export default function TransactionTable(props) {
         navigate('/create-transaction')
     }
 
-    const moveToTransfer = () => {
+    const movToTransfer = () => {
         navigate('/create-bank-transfer')
     }
 
@@ -40,7 +40,7 @@ export default function TransactionTable(props) {
                         marginRight: 2
                     }} variant='contained' size='small' onClick={movToCreate}>Create Transaction</Button>
                     <Button sx={{
-                    }} variant='contained' size='small' onClick={movToCreate}>Bank transfer</Button>
+                    }} variant='contained' size='small' onClick={movToTransfer}>Bank transfer</Button>
                 </Box>
 
             </Box>
