@@ -86,7 +86,7 @@ const BankTransfer = () => {
                 body: JSON.stringify({
                     "account_number": reciever,
                     "amount": amount,
-                    "description": "test",
+                    "description": description,
                     "is_fee_paid_by_me": true
                 })
             }).then(res => {
@@ -185,6 +185,17 @@ const BankTransfer = () => {
             }}>
                 <Typography variant='h6' align='start'>Reciever</Typography>
                 <TextField onChange={(event) => { setReciever(event.target.value) }} fullWidth value={reciever}></TextField>
+            </Box>
+
+            <Box sx={{
+                width: '80vw',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 10,
+
+            }}>
+                <Typography variant='h6' align='start'>Description</Typography>
+                <TextField onChange={(event) => { setDescription(event.target.value) }} fullWidth value={description}></TextField>
             </Box>
             <Box sx={{
                 width: '80vw',
