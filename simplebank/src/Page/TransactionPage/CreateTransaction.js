@@ -19,6 +19,7 @@ const CreateTransaction = () => {
     const [amount, setAmount] = useState('');
     const [contacts, setContacts] = useState([]);
     const [description, setDescription] = useState('');
+    const [fee,setFee] =  useState(false)
 
 
 
@@ -42,6 +43,8 @@ const CreateTransaction = () => {
     //saved contact
 
     const [saved, setSaved] = useState(false)
+
+    const [customerId , setCustomerId] = useState('');
 
 
     const bearer = 'Bearer ' + localStorage.getItem('token')
@@ -72,6 +75,9 @@ const CreateTransaction = () => {
 
 
     const sendSubmit = async () => {
+
+
+        const temp = await getAccountId(reciever);
         await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/transactions', {
             method: 'POST',
             headers: {
@@ -80,9 +86,9 @@ const CreateTransaction = () => {
             },
             body: JSON.stringify({
                 'amount': amount,
-                'description': 'test',
-                "is_fee_paid_by_me": true,
-                "receiver_id": receiverId
+                'description': description,
+                "is_fee_paid_by_me": fee,
+                "receiver_id": temp
             })
         }).then(res => {
             console.log(res)
@@ -123,8 +129,8 @@ const CreateTransaction = () => {
 
     }
 
-    const getAccountId = async (account_number) => {
-        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts/guest?account_number=${account_number}`
+    const getAccountId = (account_number) => {
+        return fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/bank-accounts/guest?account_number=${account_number}`
             , {
                 method: 'GET',
                 headers: {
@@ -134,28 +140,14 @@ const CreateTransaction = () => {
             }).then(res => {
                 return res.json();
             }).then(data => {
+                console.log(data)
                 setReceiverId(data.results[0].id)
+                setCustomerId(data.results[0].customer_id)
+                return data.results[0].id
             })
     }
 
-    const addContact = async () => {
-        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': bearer
-            },
-            body: JSON.stringify({
-                "account_number": reciever,
-                "suggest_name": ''
-            })
-        }).then(res => {
-            console.log(res)
-            return res.json();
-        }).then(data => {
-            console.log(data)
-        })
-    }
+    
 
 
 
@@ -206,6 +198,16 @@ const CreateTransaction = () => {
                 width: '80vw',
                 marginLeft: 'auto',
                 marginRight: 'auto',
+                marginTop: 10,
+
+            }}>
+                <Typography variant='h6' align='start'>Description</Typography>
+                <TextField onChange={(event) => { setDescription(event.target.value) }} fullWidth value={description}></TextField>
+            </Box>
+            <Box sx={{
+                width: '80vw',
+                marginLeft: 'auto',
+                marginRight: 'auto',
                 marginTop: 3,
                 display: 'flex',
                 flexDirection: 'row',
@@ -213,6 +215,7 @@ const CreateTransaction = () => {
 
             }}>
                 <Checkbox label="Save Contact" onChange={() => setSaved(prev => !prev)} /><Typography variant="button">Save Contact</Typography>
+                <Checkbox label="Pay Fee" onChange={() => setFee(prev => !prev)} /><Typography variant="button">Pay Fee</Typography>
 
             </Box>
             <Box sx={{
@@ -234,7 +237,7 @@ const CreateTransaction = () => {
                     }}>Cancel</Button>
                     <Button variant="contained" size="medium" onClick={sendSubmit}>Submit</Button>
                 </Box>
-                <ConfirmTransaction open={open} bearer={bearer} id={transactionId} token={transactionToken}></ConfirmTransaction>
+                <ConfirmTransaction open={open} bearer={bearer} id={transactionId} token={transactionToken} check={saved} reciever={reciever}  customerId ={customerId}   ></ConfirmTransaction>
 
             </Box>
 

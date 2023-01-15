@@ -1,6 +1,6 @@
 
 import ButtonAppBar from "../../Appbar"
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography, Dialog, DialogTitle, } from "@mui/material";
 import { Box } from "@mui/system"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,9 @@ const CreateCustomer = () => {
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [username, setUsername] = useState('');
+
+    const [open,setOpen] = useState(false)
+    const [depositId,setDepositId] =useState('')
 
 
     const goBack = () => {
@@ -39,6 +42,29 @@ const CreateCustomer = () => {
             return res.json();
         }).then(data => {
             console.log(data)
+            setDepositId(data.bank_account_id)
+            setOpen(true)
+        })
+    }
+
+    const handleDeposit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        console.log(depositId)
+        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/employee/v1/bank-accounts/${depositId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "cash_in": parseInt(data.get('cash'))
+            })
+        }).then(res => {
+            if (!res.ok) throw new Error(res.status);
+            else return res.json();
+        }).then(data => {
+            console.log(data);
             navigate('/employee')
         })
     }
@@ -105,7 +131,34 @@ const CreateCustomer = () => {
                     </Box>
                 </Box>
 
+                <Dialog open={open} >
+                    <DialogTitle>Deposit Money</DialogTitle>
+                    <Box component="form"
+                        onSubmit={handleDeposit} sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center'
+                        }}>
+                        <Box
+                            sx={{
+                                margin: 5
+                            }}>
 
+                            <Typography>Input how much cash</Typography>
+
+                            <TextField placeholder="Input Cash" required name='cash' type="number"></TextField>
+
+                        </Box>
+                        <Button variant="contained" type='submit' sx={{
+
+                            width: '50%',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            marginBottom: 10,
+                        }}>Submit</Button>
+                    </Box>
+
+                </Dialog>
 
             </Box>
         </Box>

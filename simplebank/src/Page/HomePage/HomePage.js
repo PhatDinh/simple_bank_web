@@ -22,45 +22,28 @@ const HomePage = () => {
     const [debtToken, setDebtToken] = useState()
     const [otp, setOtp] = useState('')
 
+    const [open, setOpen] = useState(false)
+
+    const [oldPass, setOldPass] = useState('');
+    const [newPass, setNewPass] = useState('');
 
 
-    const getOTP = async () => {
-        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill/${tokenStore.notifyId}`, {
-            method: 'PUT',
+
+
+    const fetchBanks = async () => {
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/options', {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': bearer
             }
         }).then(res => {
-            if (!res.ok) throw new Error(res.status);
-            else return res.json();
+            return res.json();
         }).then(data => {
-            console.log(data);
-            setDebtToken(data.token)
+
+            tokenStore.owner_bank = data.prod_owner_name
+
         })
     }
-
-    const handleSubmit = async () => {
-        console.log(debtToken)
-        console.log(otp)
-        await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/debts/fulfill-with-token/${tokenStore.notifyId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': bearer
-            },
-            body: JSON.stringify({
-                "otp": otp,
-                'token': debtToken
-            })
-        }).then(res => {
-            if (!res.ok) {
-                console.log(res)
-                navigate('/home')
-            }
-        })
-    }
-
 
 
 
@@ -97,10 +80,32 @@ const HomePage = () => {
             }
         }).then(res => {
             if (!res.ok) throw new console.error(res);
+            console.log(res)
             return res.json();
         }).then(data => {
             navigate('/')
         })
+    }
+
+    const changePassword = async () => {
+        console.log(oldPass);
+        console.log(newPass)
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/change-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "confirm_password": newPass,
+                "old_password": oldPass,
+                "password": newPass
+            })
+        }).then(res => {
+            if (!res.ok) throw new console.error(res);
+        })
+        console.log('why')
+        setOpen(false)
     }
 
 
@@ -178,6 +183,7 @@ const HomePage = () => {
 
     useEffect(() => {
         fetchData();
+        fetchBanks();
         //registerStream();
     }, [])
 
@@ -213,7 +219,7 @@ const HomePage = () => {
             justifyContent: 'center',
             marginTop: 2
         }}>
-            <Button variant="contained" sx={{
+            <Button variant="contained" onClick={() => setOpen(true)} sx={{
                 marginRight: 2
             }}>Change Password</Button>
             <Button variant="contained" onClick={() => deleteAccount(profile?.id)}>Deactive Account</Button>
@@ -221,6 +227,52 @@ const HomePage = () => {
         {
             (tokenStore.typeDialog == 'create') ? <CreateDialog bearer={bearer} debt={debt} /> : (tokenStore.typeDialog == 'cancel') ? <CancelDialog debt={debt} /> : (tokenStore.typeDialog == 'fulfill') ? <FulfillDialog debt={debt} /> : ''
         }
+        {
+            open &&
+            <Box>
+                <Box sx={{
+                    margin: 5
+                }}>
+                    <Box sx={{
+                        width: '40vw',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: 5,
+
+                    }}>
+                        <Typography variant='h6' align='start'>Old Password</Typography>
+                        <TextField type='password' onChange={(event) => { setOldPass(event.target.value) }} fullWidth value={oldPass}></TextField>
+                    </Box>
+
+                    <Box sx={{
+                        width: '40vw',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginTop: 5,
+
+                    }}>
+                        <Typography variant='h6' align='start'>New Password</Typography>
+                        <TextField type='password' onChange={(event) => { setNewPass(event.target.value) }} fullWidth value={newPass}></TextField>
+                    </Box>
+                </Box>
+                <Box sx={{
+                    width: '50%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginBottom: 5,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                    <Button variant="contained" onClick={changePassword} sx={{
+                        marginRight: 2
+
+                    }}>Submit</Button>
+                </Box>
+            </Box>
+        }
+
+
 
     </Box>
 }

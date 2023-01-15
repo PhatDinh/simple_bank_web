@@ -10,7 +10,7 @@ const ConfirmTransaction = (props) => {
 
 
     //value
-    const { open, bearer, id, token } = props;
+    const { open, bearer, id, token, check, reciever, customerId } = props;
 
     const [otp, setOtp] = useState('');
 
@@ -41,10 +41,47 @@ const ConfirmTransaction = (props) => {
                 console.log(res)
             }
         }).then(data => {
+            if (check==true)
+            {
+                addContact();
+            }
             navigate('/transactions')
         })
     }
 
+    const addContact = async () => {
+
+        const name = await fetch(`https://infinite-beyond-71487.herokuapp.com/api/customer/v1/customers/${customerId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+        }).then(res => {
+            console.log(res)
+            return res.json();
+        }).then(data => {
+            return data.last_name
+        })
+
+
+        await fetch('https://infinite-beyond-71487.herokuapp.com/api/customer/v1/me/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': bearer
+            },
+            body: JSON.stringify({
+                "account_number": reciever,
+                "suggest_name": name
+            })
+        }).then(res => {
+            console.log(res)
+            return res.json();
+        }).then(data => {
+            console.log(data)
+        })
+    }
 
 
 

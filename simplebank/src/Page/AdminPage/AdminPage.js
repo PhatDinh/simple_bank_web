@@ -16,6 +16,9 @@ const AdminPage = () => {
     const [tabIndex, setTabIndex] = useState(0);
     const labels = ["Transaction", "Employee"];
 
+
+    const [banks,setBanks] = useState([]);
+
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     }
@@ -61,6 +64,8 @@ const AdminPage = () => {
         })
     }
 
+ 
+
 
     useEffect(() => {
         fetchData();
@@ -98,7 +103,7 @@ const AdminPage = () => {
                 minHeight: '50vh',
                 marginTop: 15
             }}>
-                {tabIndex == 1 ? <EmployeeTable employees={employees} bearer={bearer}/> : <TransactionTable transactions={transactions} />}
+                {tabIndex == 1 ? <EmployeeTable employees={employees} bearer={bearer} /> : <TransactionTable transactions={transactions} bearer={bearer} />}
             </Box>
 
         </Box>

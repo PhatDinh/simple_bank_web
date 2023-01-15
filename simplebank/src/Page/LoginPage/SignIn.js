@@ -53,12 +53,15 @@ export default function SignInSide(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (tabIndex == 0) {
-      handleCustomer(data);
-    } else if (tabIndex == 1) {
-      handleEmployee(data);
-    } else if (tabIndex == 2) {
-      handleAdmin(data);
+    if (check==true)
+    {
+      if (tabIndex == 0) {
+        handleCustomer(data);
+      } else if (tabIndex == 1) {
+        handleEmployee(data);
+      } else if (tabIndex == 2) {
+        handleAdmin(data);
+      }
     }
   };
 
@@ -135,7 +138,7 @@ export default function SignInSide(props) {
   }
 
   const handleCaptcha = () => {
-
+    setCheck(true)
   }
 
 

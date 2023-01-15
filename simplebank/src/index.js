@@ -40,7 +40,7 @@ root.render(
       <Route path="/create-contact" element={<CreateContact />} />
       <Route path="/debts" element={<DebtPage />} />
       <Route path="/create-debt" element={<CreateDebt />} />
-
+      
 
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/employee" element={<EmployeePage />} />

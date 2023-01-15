@@ -51,7 +51,7 @@ const CreateDialog = (props) => {
         }).then(res => {
             if (!res.ok) {
                 console.log(res)
-                navigate('/home')
+                navigate('/debt')
             }
         })
     }

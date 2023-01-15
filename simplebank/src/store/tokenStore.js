@@ -8,6 +8,7 @@ class TokenStore {
     notifyId = '';
     openDialog = false;
     typeDialog = null
+    owner_bank = '';
 
     constructor() {
         makeAutoObservable(this)
